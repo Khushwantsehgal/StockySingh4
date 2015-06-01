@@ -8,51 +8,77 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/containerTop"
+    android:background="@drawable/rectangle"
     >
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical"
-        android:padding="25dp"
-        android:background="@drawable/rectangle"
-        android:layout_below ="@+id/progress_bar"
-        android:gravity="center_vertical"
-        android:weightSum="1"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_CurrencyCode"
-            android:textSize="21sp"
-            android:text="INR"
-
-            />
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/FinalAmount_textview"
-            android:textSize="42sp"
-            android:text="0.00"
-            android:ellipsize="marquee"/>
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:indeterminate="true"
-            android:max="100"
-            android:minWidth="200dp"
-            android:progress="1"
-            android:background="#FF9933"
-            />
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:padding="25dp"
+            android:id="@+id/LinearLayoutonTop"
+
+            android:layout_below ="@+id/progress_bar"
+            android:gravity="center_vertical"
+            android:weightSum="1"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_CurrencyCode"
+                android:textSize="21sp"
+                android:text="INR >"
+
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/FinalAmount_textview"
+                android:textSize="42sp"
+                android:text="0.00"
+                android:ellipsize="marquee"/>
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:indeterminate="true"
+                android:max="100"
+                android:minWidth="200dp"
+                android:progress="1"
+                android:background="#FF9933"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="25dp"
+
+                android:orientation="horizontal"
+
+                >
+                <TextView
+                    android:layout_width="500dp"
+                    android:layout_height="25sp"
+                    android:text="ADBE"
+                    android:id="@+id/tv_ticker"
+                    android:textSize="21sp"
+
+                    />
+
+                </LinearLayout>
 
 
-    </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
 
 
 
@@ -68,6 +94,8 @@
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:id="@+id/containerStockSymbol">
+
+
 
         <TextView
             android:layout_width="0dp"
@@ -218,9 +246,6 @@
             android:layout_weight="1"
             />
     </LinearLayout>
-
-
-
 
 </RelativeLayout>
 

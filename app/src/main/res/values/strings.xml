@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">StockySingh</string>
+    <string name="app_name"> </string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="tab">\u0009</string>
 
     <string-array name="USA_National_Stock_Exchange">
         <item>AAL American Airlines Group Inc.</item>
@@ -1758,5 +1759,5 @@
     <drawable name="green_color">#00ff00</drawable>
     <string name="pref_mypref_key">mypref</string>
     <string name="pref_mypref_default">blah</string>
-    <string name="unicode_arrow">\u25B6</string>
+    <string name="unicode_arrow">\u3009</string>
 </resources>

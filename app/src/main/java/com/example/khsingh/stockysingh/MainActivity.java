@@ -8,14 +8,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.app.ActionBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +33,7 @@ import java.util.concurrent.ExecutionException;
  * The application calculates, on selling the stocks, the actual amount to be remitted into account after deducting various fees and charges.
  */
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     //Edittext for  Number of Stocks and Stock Trader
     EditText mStock,mStockTrader,mBank;
@@ -74,9 +80,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private String mYQLQueryToGetUSDtoLocalCurrencyConversion_head = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22USD%22%2C%20%22";
     private String mYQLQueryToGetUSDtoLocalCurrencyConversion_tail = "%22)&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
     @Override
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         initViews();
         // Calculate the final amount
         mStock.addTextChangedListener(watcher);
@@ -97,6 +113,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     } // onCreate Ends
 
     private void initViews() {
+
+
         mStock = (EditText) findViewById(R.id.et_Stocks);
         mFinalAmount = (TextView) findViewById(R.id.FinalAmount_textview);
         mCurrencyCode = (TextView) findViewById(R.id.tv_CurrencyCode);
@@ -125,7 +143,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mYQLQuery = mYQLQuery_head + String.valueOf(StockSelected) + mYQLQuery_tail;
         mYQLQueryToGetUSDtoLocalCurrencyConversion = mYQLQueryToGetUSDtoLocalCurrencyConversion_head + String.valueOf(CurrencySelected) + mYQLQueryToGetUSDtoLocalCurrencyConversion_tail;
 
-
+      //  ShowTicker();
 
     } //init views ends
 
@@ -347,6 +365,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         }
     }
+    void ShowTicker(){
+        Animation animateToLeft = new TranslateAnimation(1100, -1100, 0, 0);
+        animateToLeft.setDuration(12000);
+        animateToLeft.setRepeatMode(Animation.RESTART);
+        animateToLeft.setRepeatCount(Animation.INFINITE);
+
+        TextView mTicker = (TextView) findViewById(R.id.tv_ticker);
+        mTicker.setAnimation(animateToLeft);
+        mTicker.setText("ADBE" +getString(R.string.tab)+ "80.04"+ getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab) + "INR"+getString(R.string.tab)+"63.74" +getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+ "E-trade" +" "+ "19$");
+
+
+
+
+    }
+
 
 
 }//MainActivity Class ends here function e
