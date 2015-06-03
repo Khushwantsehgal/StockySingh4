@@ -1757,6 +1757,7 @@
     <drawable name="black_color">#ffffff</drawable>
     <drawable name="blue_color">#0000ff</drawable>
     <drawable name="green_color">#00ff00</drawable>
+    <drawable name="App_Blue">#5677FC</drawable>
     <string name="pref_mypref_key">mypref</string>
     <string name="pref_mypref_default">blah</string>
     <string name="unicode_arrow">\u3009</string>

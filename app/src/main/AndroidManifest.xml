@@ -3,7 +3,7 @@
     package="com.example.khsingh.stockysingh" >
 
     <!-- Internet permission -->
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="15" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application

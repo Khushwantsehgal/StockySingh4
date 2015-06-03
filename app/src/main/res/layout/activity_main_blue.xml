@@ -9,23 +9,15 @@
         
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="256dp"
+            android:layout_height="225dp"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:paddingTop="25dp"
             android:background="@drawable/rectangle_blue"
             android:orientation="vertical"
 
             android:weightSum="1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_options"
-            android:typeface="sans"
-            android:background="@drawable/more_options"
-            android:layout_gravity="right" />
 
-        <TextView
+            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_CurrencyCode"
@@ -43,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/FinalAmount_textview"
                 android:typeface="sans"
-                android:text="25000"
+                android:text="2500000"
                 android:textSize="26pt"
                 android:textColor="#FFFFFF"
                 android:gravity="start"
@@ -71,17 +63,24 @@
                 android:orientation="horizontal"
 
                 >
+
+
                 <TextView
-                    android:layout_width="500dp"
-                    android:layout_height="25sp"
-                    android:text="ADBE 80.04        INR 63.74       E-trade 45$"
-                    android:id="@+id/tv_ticker"
+                    android:text="START | lunch 20.00 | Dinner 60.00 | Travel 60.00 | Doctor 5000.00 | lunch 20.00 | Dinner 60.00 | Travel 60.00 | Doctor 5000.00 | END"
+                    android:id="@+id/MarqueeText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
                     android:textSize="8pt"
                     android:textColor="#FFFFFF"
-                    android:gravity="bottom"
                     android:fontFamily="sans-serif-light"
                     android:textStyle="normal"
-
                     />
 
             </LinearLayout>
