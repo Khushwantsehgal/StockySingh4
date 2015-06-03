@@ -1,44 +1,48 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rlv1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/containerTop"
-    android:background="@drawable/rectangle"
-    >
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/containerTop">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="175dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:background="@drawable/rectangle_blue"
             android:orientation="vertical"
-            android:padding="25dp"
-            android:id="@+id/LinearLayoutonTop"
 
-            android:layout_below ="@+id/progress_bar"
-            android:gravity="center_vertical"
-            android:weightSum="1"
-            >
+            android:weightSum="1">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_CurrencyCode"
-                android:textSize="21sp"
-                android:text="INR >"
+                android:typeface="sans"
+                android:text="INR"
+                android:textSize="10pt"
+                android:textColor="#FFFFFF"
+                android:gravity="start"
 
-                />
+                android:fontFamily="sans-serif-light"
+                android:textStyle="normal"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/FinalAmount_textview"
-                android:textSize="42sp"
+                android:typeface="sans"
                 android:text="0.00"
-                android:ellipsize="marquee"/>
+                android:textSize="20pt"
+                android:textColor="#FFFFFF"
+                android:gravity="start"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="normal"
+                />
+
             <ProgressBar
                 android:id="@+id/progress_bar"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -49,29 +53,214 @@
                 android:max="100"
                 android:minWidth="200dp"
                 android:progress="1"
-                android:background="#FF9933"
+                android:background="@drawable/rectangle_blue"
+                android:progressTint="@color/abc_background_cache_hint_selector_material_light"
                 />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rectangle_blue"
+
+
+        android:layout_below="@+id/containerTop"
+        android:orientation="horizontal"
+        android:id="@+id/marqueeContainer"
+
+        >
+
+
+        <TextView
+            android:text="START | lunch 20.00 | Dinner 60.00 | Travel 60.00 | Doctor 5000.00 | lunch 20.00 | Dinner 60.00 | Travel 60.00 | Doctor 5000.00 | END"
+            android:id="@+id/MarqueeText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:freezesText="true"
+            android:textSize="8pt"
+            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-light"
+            android:textStyle="normal"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_below="@id/marqueeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:id="@+id/containerStockSymbol" >
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_Stocks"
+            android:background="@null"
+
+            android:textStyle="normal"
+            android:textSize="8pt"
+            android:hint="Number of Stocks"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_height="1dp"
+            android:layout_marginTop="7dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/containerStockSymbol"/>
+
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@id/containerStockSymbol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:id="@+id/containerStock"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="25dp"
 
-                android:orientation="horizontal"
+                android:textStyle="normal"
+                android:textSize="8pt"
+                android:text="Stock Symbol"
+                android:ems                     = "4"
+                android:textColor="#000000"
+                android:layout_weight="1"
 
-                >
-                <TextView
-                    android:layout_width="500dp"
-                    android:layout_height="25sp"
-                    android:text="ADBE"
-                    android:id="@+id/tv_ticker"
-                    android:textSize="21sp"
-
-                    />
-
-                </LinearLayout>
+                />
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_StocksSymbol"
+                android:textStyle="normal"
+                android:textSize="8pt"
+                android:text="ADBE"
+                android:textColor="#000000"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21dp"
+                android:backgroundTint="#808080"
+                android:text="@string/unicode_arrow"
+                android:layout_gravity="center"
+
+                />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_height="1dp"
+            android:layout_marginTop="7dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/containerStockSymbol"/>
+
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/containerStock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:id="@+id/containerLocalCurrency"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textStyle="normal"
+                android:textSize="8pt"
+                android:text="Local Currency"
+                android:textColor="#000000"
+                android:layout_weight="1"
+
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_CurrencyCode2"
+
+
+                android:textStyle="normal"
+                android:textSize="8pt"
+                android:text="INR"
+                android:ems                     = "3"
+                android:textColor="#000000"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21dp"
+                android:backgroundTint="#808080"
+                android:text="@string/unicode_arrow"
+                android:layout_gravity="center"
+                />
 
 
         </LinearLayout>
@@ -80,173 +269,86 @@
 
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
 
-
-</FrameLayout>
-
-
-    <LinearLayout
-        android:layout_below="@id/containerTop"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:id="@+id/containerStockSymbol">
+        <View
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_height="1dp"
+            android:layout_marginTop="7dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/containerStockSymbol"/>
 
 
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Stock Symbol"
-            android:layout_weight="1"
-            android:layout_gravity="right|center_vertical" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ems="7"
-            android:id="@+id/tv_StocksSymbol"
-            android:layout_gravity="right"
-            android:textSize="18sp"
-            android:layout_weight="1"
-            android:text="ADBE"
-            ></TextView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="21sp"
-            android:backgroundTint="#808080"
-            android:text="@string/unicode_arrow"
-            android:layout_gravity="center"
-            />
 
 
     </LinearLayout>
 
-    <View
-        android:layout_width="310dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="1dp"
-        android:layout_marginTop="4dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@id/containerStockSymbol"/>
-
     <LinearLayout
-        android:id="@+id/containerStock"
+        android:layout_below="@id/containerLocalCurrency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/containerStockSymbol"
+        android:orientation="vertical"
         android:layout_marginTop="15dp"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
+        android:id="@+id/Setreminder"
+
         >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Stocks"
-            android:layout_weight="1"
-            android:layout_gravity="right|center_vertical"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <EditText
-            android:id="@+id/et_Stocks"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            />
+
+                android:textStyle="normal"
+                android:textSize="8pt"
+                android:text="Set a Reminder"
+                android:ems                     = "4"
+                android:textColor="#000000"
+                android:layout_weight="1"
+
+                />
 
 
 
-    </LinearLayout>
-    <View
-        android:layout_width="310dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="1dp"
-        android:layout_marginTop="3dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@+id/containerStock"
-        />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21dp"
+                android:text="@string/unicode_arrow"
+                android:layout_gravity="center"
+
+                />
 
 
-    <LinearLayout
-        android:layout_below="@id/containerStock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:id="@+id/containerStockTrader">
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Stock Trader"
-            android:layout_weight="1"
-            android:layout_gravity="right|center_vertical"
-            />
 
-        <EditText
 
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:ems="7"
-            android:id="@+id/et_StocksTrader"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
 
-    <View
-        android:layout_width="310dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="1dp"
-        android:layout_marginTop="3dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@+id/containerStockTrader"
-        />
+        <View
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_height="1dp"
+            android:layout_marginTop="7dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@id/containerStockSymbol"/>
 
-    <LinearLayout
-        android:layout_below="@id/containerStockTrader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:id="@+id/containerBank">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Bank"
-            android:layout_weight="1"
-            android:layout_gravity="right|center_vertical"
-            />
 
-        <EditText
 
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:ems="7"
-            android:id="@+id/et_Bank"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            />
+
     </LinearLayout>
 
 </RelativeLayout>
-
-

@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/FinalAmount_textview"
                 android:typeface="sans"
-                android:text="2500000"
+                android:text="25000"
                 android:textSize="26pt"
                 android:textColor="#FFFFFF"
                 android:gravity="start"

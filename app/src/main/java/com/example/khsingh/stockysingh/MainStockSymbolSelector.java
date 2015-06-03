@@ -3,6 +3,9 @@ package com.example.khsingh.stockysingh;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,7 +17,7 @@ import java.util.StringTokenizer;
 /**
  * Created by khsingh on 4/28/2015.
  */
-public class MainStockSymbolSelector extends Activity {
+public class MainStockSymbolSelector extends ActionBarActivity {
 
     ListView mStockSymbol;
     String message, first, second;
@@ -50,5 +53,12 @@ public class MainStockSymbolSelector extends Activity {
 
     private void initViews() {
         mStockSymbol = (ListView) findViewById(R.id.lv_StockSymbol);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

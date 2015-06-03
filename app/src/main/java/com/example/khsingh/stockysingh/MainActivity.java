@@ -1,8 +1,13 @@
 package com.example.khsingh.stockysingh;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +15,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,10 +42,10 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     //Edittext for  Number of Stocks and Stock Trader
-    EditText mStock,mStockTrader,mBank;
+    EditText mStock;
 
     //Textview for actual amount to be remitted into account, the Currency code for the final amount/
-    TextView mFinalAmount, mCurrencyCode,mStockSymbol;
+    TextView mFinalAmount, mCurrencyCode,mStockSymbol, mCurrencyCode2;
 
     //Integer to hold the number of stocks entered by user
     int mStockValue = 0;
@@ -84,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.main_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -97,6 +103,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // Calculate the final amount
         mStock.addTextChangedListener(watcher);
         mCurrencyCode.addTextChangedListener(watcher);
+        mCurrencyCode2.addTextChangedListener(watcher);
         mStockSymbol.addTextChangedListener(watcher);
 
         // Sends the KeyEvent Action Down and it causes the calculation to happen for stored value of mStock. It is only for the value stored in preferences
@@ -107,6 +114,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // Opens a new activity to select currency codes and stockSymbols
         mCurrencyCode.setOnClickListener(this);
+        mCurrencyCode2.setOnClickListener(this);
         mStockSymbol.setOnClickListener(this);
 
 
@@ -114,14 +122,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void initViews() {
 
-
+        ShowTicker();
         mStock = (EditText) findViewById(R.id.et_Stocks);
         mFinalAmount = (TextView) findViewById(R.id.FinalAmount_textview);
         mCurrencyCode = (TextView) findViewById(R.id.tv_CurrencyCode);
+        mCurrencyCode2 = (TextView) findViewById(R.id.tv_CurrencyCode2);
         mStockSymbol = (TextView) findViewById(R.id.tv_StocksSymbol);
-        mStockTrader = (EditText) findViewById(R.id.et_StocksTrader);
         mProgress = (ProgressBar) findViewById(R.id.progress_bar);
-        mBank = (EditText) findViewById(R.id.et_Bank);
         //mProgress.setVisibility(View.GONE);
 
 
@@ -139,6 +146,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
          CurrencySelected = settings.getString("CurrencySelected", "INR");
          Log.d("CurrencySelected", String.valueOf(CurrencySelected));
          mCurrencyCode.setText(String.valueOf(CurrencySelected));
+         mCurrencyCode2.setText(String.valueOf(CurrencySelected));
 
         mYQLQuery = mYQLQuery_head + String.valueOf(StockSelected) + mYQLQuery_tail;
         mYQLQueryToGetUSDtoLocalCurrencyConversion = mYQLQueryToGetUSDtoLocalCurrencyConversion_head + String.valueOf(CurrencySelected) + mYQLQueryToGetUSDtoLocalCurrencyConversion_tail;
@@ -220,17 +228,24 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }finally
         {
             try {
-                mStockTradingAt = new RetrieveLastTradePriceOnly().execute(mYQLQuery).get();
+                Boolean networkStatus = isNetworkOnline();
+                if(networkStatus){
+                    mStockTradingAt = new RetrieveLastTradePriceOnly().execute(mYQLQuery).get();
 
-                mLocalCurrencyExchangeRate = new RetrieveLocalCurrencyRate().execute(mYQLQueryToGetUSDtoLocalCurrencyConversion).get();
+                    mLocalCurrencyExchangeRate = new RetrieveLocalCurrencyRate().execute(mYQLQueryToGetUSDtoLocalCurrencyConversion).get();
 
-                Log.d("Debug"," MainActivity" + mLocalCurrencyExchangeRate);
+                    Log.d("Debug"," MainActivity" + mLocalCurrencyExchangeRate);
+                } else
+                {
+                    Log.d("Debug"," NetworkDown");
+
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            mStockTrader.setText(mStockTradingAt.toString());
 
             mAmountInLocalCurrency = ((double) mStockValue * mStockTradingAt) * mLocalCurrencyExchangeRate;
 
@@ -260,6 +275,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             mYQLQueryToGetUSDtoLocalCurrencyConversion = mYQLQueryToGetUSDtoLocalCurrencyConversion_head + message + mYQLQueryToGetUSDtoLocalCurrencyConversion_tail;
             Log.d("Debug", "mYQLQueryToGetUSDtoLocalCurrencyConversion: " + mYQLQueryToGetUSDtoLocalCurrencyConversion);
             mCurrencyCode.setText(message);
+            mCurrencyCode2.setText(message);
 
         }else if(requestCode == REQ_CODE_STOCK_SYMBOL && Activity.RESULT_OK == resultCode){
             String message = data.getStringExtra("MESSAGE");
@@ -292,6 +308,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 startActivityForResult(intent,REQ_CODE_STOCK_SYMBOL);
             }
             break;
+            case R.id.tv_CurrencyCode2:{
+                Intent intent = new Intent(MainActivity.this, MainCurrencyCodeSelector.class);
+                startActivityForResult(intent, REQ_CODE_CURRENCY_SYMBOL);
+            }
+            break;
+
             default:
             {
                 Log.d("Debug", "onClick(View v): No view selected yet");
@@ -341,16 +363,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             StockyJSONParser stockyJSONParser = new StockyJSONParser();
             JSONObject jsonObject = stockyJSONParser.getJSONFromURL(URL[0]);
-            try{
-                JSONObject mQuery = jsonObject.getJSONObject("query");
-                JSONObject mResult = mQuery.getJSONObject("results");
-                JSONObject mQuote = mResult.getJSONObject("quote");
-                mLastTradePriceOnly = mQuote.getString("LastTradePriceOnly");
+            if(!jsonObject.isNull("query")){
+                try{
+                    JSONObject mQuery = jsonObject.getJSONObject("query");
+                    JSONObject mResult = mQuery.getJSONObject("results");
+                    JSONObject mQuote = mResult.getJSONObject("quote");
+                    mLastTradePriceOnly = mQuote.getString("LastTradePriceOnly");
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }else {
+                Log.d("Debug","jsonObject.isNull " + String.valueOf(mLastTradePriceOnly ));
+
             }
-
 
             Log.d("Debug",String.valueOf(mLastTradePriceOnly ));
             return Double.parseDouble(mLastTradePriceOnly);
@@ -366,17 +394,37 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
     void ShowTicker(){
-        Animation animateToLeft = new TranslateAnimation(1100, -1100, 0, 0);
-        animateToLeft.setDuration(12000);
-        animateToLeft.setRepeatMode(Animation.RESTART);
-        animateToLeft.setRepeatCount(Animation.INFINITE);
 
-        TextView mTicker = (TextView) findViewById(R.id.tv_ticker);
-        mTicker.setAnimation(animateToLeft);
-        mTicker.setText("ADBE" +getString(R.string.tab)+ "80.04"+ getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab) + "INR"+getString(R.string.tab)+"63.74" +getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+ "E-trade" +" "+ "19$");
+        new Thread(new Runnable() {
+            public void run() {
+                TextView textView = (TextView) findViewById(R.id.MarqueeText);
+                textView.setText("ADBE 79.04    INR 63.75   Brokage USD20   Wire Transfer USD25 ");
+                textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                textView.setSelected(true);
+                textView.setSingleLine(true);
+            }
+        }).start();
 
 
+    }
 
+    public boolean isNetworkOnline() {
+        boolean status=false;
+        try{
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getNetworkInfo(0);
+            if (netInfo != null && netInfo.getState()==NetworkInfo.State.CONNECTED) {
+                status= true;
+            }else {
+                netInfo = cm.getNetworkInfo(1);
+                if(netInfo!=null && netInfo.getState()==NetworkInfo.State.CONNECTED)
+                    status= true;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return status;
 
     }
 
