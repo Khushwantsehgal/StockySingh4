@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.app.ActionBar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -116,13 +117,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mCurrencyCode.setOnClickListener(this);
         mCurrencyCode2.setOnClickListener(this);
         mStockSymbol.setOnClickListener(this);
+        ShowTicker();
 
 
     } // onCreate Ends
 
     private void initViews() {
 
-        ShowTicker();
+
         mStock = (EditText) findViewById(R.id.et_Stocks);
         mFinalAmount = (TextView) findViewById(R.id.FinalAmount_textview);
         mCurrencyCode = (TextView) findViewById(R.id.tv_CurrencyCode);
@@ -220,6 +222,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 mStockValue = 0;
 
             }
+            setPreferences();
 
 
 
@@ -231,8 +234,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Boolean networkStatus = isNetworkOnline();
                 if(networkStatus){
                     mStockTradingAt = new RetrieveLastTradePriceOnly().execute(mYQLQuery).get();
+                    setPreferences("StockTradingAt", mStockTradingAt.toString());
 
                     mLocalCurrencyExchangeRate = new RetrieveLocalCurrencyRate().execute(mYQLQueryToGetUSDtoLocalCurrencyConversion).get();
+                    setPreferences("LocalCurrencyExchangeRate", mLocalCurrencyExchangeRate.toString());
+                    ShowTicker();
 
                     Log.d("Debug"," MainActivity" + mLocalCurrencyExchangeRate);
                 } else
@@ -259,8 +265,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
 
         }
-
-
     }
 
     //Evaluates the result returned by StockSymbol and Currency Selection activities
@@ -276,11 +280,17 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             Log.d("Debug", "mYQLQueryToGetUSDtoLocalCurrencyConversion: " + mYQLQueryToGetUSDtoLocalCurrencyConversion);
             mCurrencyCode.setText(message);
             mCurrencyCode2.setText(message);
+            setPreferences("CurrencySelected",message);
+            ShowTicker();
+
+
 
         }else if(requestCode == REQ_CODE_STOCK_SYMBOL && Activity.RESULT_OK == resultCode){
             String message = data.getStringExtra("MESSAGE");
             mYQLQuery = mYQLQuery_head + message + mYQLQuery_tail;
             mStockSymbol.setText(message);
+            setPreferences("StockSelected", message);
+            ShowTicker();
             Log.d("Debug", "mYQLQuery: " + mYQLQuery);
 
         }
@@ -301,16 +311,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.tv_CurrencyCode: {
                 Intent intent = new Intent(MainActivity.this, MainCurrencyCodeSelector.class);
                 startActivityForResult(intent, REQ_CODE_CURRENCY_SYMBOL);
+
             }
             break;
             case R.id.tv_StocksSymbol: {
                 Intent intent = new Intent(MainActivity.this, MainStockSymbolSelector.class);
                 startActivityForResult(intent,REQ_CODE_STOCK_SYMBOL);
+
             }
             break;
             case R.id.tv_CurrencyCode2:{
                 Intent intent = new Intent(MainActivity.this, MainCurrencyCodeSelector.class);
                 startActivityForResult(intent, REQ_CODE_CURRENCY_SYMBOL);
+
             }
             break;
 
@@ -330,28 +343,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // We need an Editor object to make preference changes.
         // All objects are from android.context.Context
         Log.d("Stop","onStop Called");
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-
-        if (!isEmpty(mStock)){
-            editor.putInt("StockCount", Integer.parseInt(mStock.getText().toString()));
-            Log.d("Debug","onStop StockCount" + Integer.parseInt(mStock.getText().toString()));
-        }else{
-            editor.putInt("StockCount", 0);
-            Log.d("Debug","onStop StockCount is empty so set to " + "0");
-        }
-
-        editor.putString("StockSelected", mStockSymbol.getText().toString());
-        editor.putString("CurrencySelected", mCurrencyCode.getText().toString());
-
-
-        Log.d("Debug","onStop StockSelected" + mStockSymbol.getText().toString());
-        Log.d("Debug","onStop CurrencySelected" + mCurrencyCode.getText().toString());
-
-
-        // Commit the edits!
-        editor.commit();
+        setPreferences();
     }
+
+
 
     class RetrieveLastTradePriceOnly extends AsyncTask<String, Void, Double> {
 
@@ -381,6 +376,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
 
             Log.d("Debug",String.valueOf(mLastTradePriceOnly ));
+
             return Double.parseDouble(mLastTradePriceOnly);
         }
 
@@ -393,20 +389,60 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         }
     }
+
+
+    class RetrieveLocalCurrencyRate extends AsyncTask<String, Void, Double> {
+
+        String mlocalCurrencyTradingAT;
+        private Exception exception;
+
+        protected Double doInBackground(String... URL) {
+
+            StockyJSONParser stockyJSONParser = new StockyJSONParser();
+            JSONObject jsonObject = stockyJSONParser.getJSONFromURL(URL[0]);
+            try{
+                JSONObject mQuery = jsonObject.getJSONObject("query");
+                JSONObject mResult = mQuery.getJSONObject("results");
+                JSONArray rate = mResult.getJSONArray("rate");
+                JSONObject localCurrencyTradingAT = rate.getJSONObject(1);
+                mlocalCurrencyTradingAT = localCurrencyTradingAT.getString("Rate");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            Log.d("mlocalCurrencyTradingAT",String.valueOf(mlocalCurrencyTradingAT ));
+
+            return Double.parseDouble(mlocalCurrencyTradingAT);
+        }
+
+
+        protected void onPostExecute(Double result) {
+            // TODO: check this.exception
+            // TODO: do something with the feed
+
+
+        }
+    }
+
     void ShowTicker(){
 
-        new Thread(new Runnable() {
-            public void run() {
-                TextView textView = (TextView) findViewById(R.id.MarqueeText);
-                textView.setText("ADBE 79.04    INR 63.75   Brokage USD20   Wire Transfer USD25 ");
-                textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-                textView.setSelected(true);
-                textView.setSingleLine(true);
-            }
-        }).start();
+
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+
+            TextView textView = (TextView) findViewById(R.id.MarqueeText);
+
+            textView.setText(settings.getString("StockSelected","#Error retrieving value#") +getString(R.string.tab)+ settings.getString("StockTradingAt","#Error retrieving value#") +   getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab) +settings.getString("CurrencySelected","#Error retrieving value#") + getString(R.string.tab) + settings.getString("LocalCurrencyExchangeRate","#Error retrieving value#")  +"    Brokage USD20   Wire Transfer USD25 ");
 
 
-    }
+            textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            textView.setSelected(true);
+
+        }
+
+
 
     public boolean isNetworkOnline() {
         boolean status=false;
@@ -427,6 +463,37 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         return status;
 
     }
+
+    public void setPreferences() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+
+        if (!isEmpty(mStock)){
+            editor.putInt("StockCount", Integer.parseInt(mStock.getText().toString()));
+            Log.d("Debug", "onStop StockCount" + Integer.parseInt(mStock.getText().toString()));
+        }else{
+            editor.putInt("StockCount", 0);
+            Log.d("Debug","onStop StockCount is empty so set to " + "0");
+        }
+        // Commit the edits!
+        editor.commit();
+    }
+
+        public void setPreferences(String key, String value) {
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+
+            editor.putString(key, value);
+
+            Log.d("Debug", "Key and Value" + key + value);
+            Log.d("Debug","onStop CurrencySelected" + mCurrencyCode.getText().toString());
+
+
+            // Commit the edits!
+            editor.commit();
+        }
+
+
 
 
 

@@ -1,15 +1,19 @@
 package com.example.khsingh.stockysingh;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.StringTokenizer;
@@ -27,6 +31,23 @@ public class MainStockSymbolSelector extends ActionBarActivity {
         setContentView(R.layout.activity_stocksymbolselector);
         initViews();
 
+
+    }
+
+    private void initViews() {
+        mStockSymbol = (ListView) findViewById(R.id.lv_StockSymbol);
+
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        getMenuInflater().inflate(R.menu.stockselector_activity_actions, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
+
+
+
         String[] StockSymbol = getResources().getStringArray(R.array.USA_National_Stock_Exchange);
         ArrayAdapter<String> a_StockSymbol = new ArrayAdapter<String>(this, R.layout.layout_for_stock_symbols, StockSymbol);
         mStockSymbol.setAdapter(a_StockSymbol);
@@ -37,8 +58,8 @@ public class MainStockSymbolSelector extends ActionBarActivity {
                 try{
                     message = mStockSymbol.getItemAtPosition(position).toString();
                     StringTokenizer tokens = new StringTokenizer(message, " ");
-                     first = tokens.nextToken();// this will contain "Fruit"
-                     second = tokens.nextToken();
+                    first = tokens.nextToken();// this will contain "Fruit"
+                    second = tokens.nextToken();
                     Toast.makeText(getApplication(), first, Toast.LENGTH_LONG).show();
                 }catch (Exception e){
                     Toast.makeText(getApplication(), "Exception Occurred", Toast.LENGTH_LONG).show();
@@ -49,16 +70,12 @@ public class MainStockSymbolSelector extends ActionBarActivity {
                 finish();
             }
         });
-    }
 
-    private void initViews() {
-        mStockSymbol = (ListView) findViewById(R.id.lv_StockSymbol);
-    }
+        a_StockSymbol.getFilter().filter(searchView.getQuery());
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_activity_actions, menu);
+
+
+
         return super.onCreateOptionsMenu(menu);
     }
 }

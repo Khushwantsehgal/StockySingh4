@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name"> </string>
+    <string name="app_label">Stocky Singh </string>
+    <string name="app_name">Stocky Singh </string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="tab">\u0009</string>
+    <string name="search_hint">Search Currency Codes</string>
 
     <string-array name="USA_National_Stock_Exchange">
         <item>AAL American Airlines Group Inc.</item>
