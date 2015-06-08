@@ -31,23 +31,6 @@ public class MainStockSymbolSelector extends ActionBarActivity {
         setContentView(R.layout.activity_stocksymbolselector);
         initViews();
 
-
-    }
-
-    private void initViews() {
-        mStockSymbol = (ListView) findViewById(R.id.lv_StockSymbol);
-
-
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        getMenuInflater().inflate(R.menu.stockselector_activity_actions, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
-
-
-
         String[] StockSymbol = getResources().getStringArray(R.array.USA_National_Stock_Exchange);
         ArrayAdapter<String> a_StockSymbol = new ArrayAdapter<String>(this, R.layout.layout_for_stock_symbols, StockSymbol);
         mStockSymbol.setAdapter(a_StockSymbol);
@@ -71,11 +54,21 @@ public class MainStockSymbolSelector extends ActionBarActivity {
             }
         });
 
-        a_StockSymbol.getFilter().filter(searchView.getQuery());
 
 
+    }
+
+    private void initViews() {
+        mStockSymbol = (ListView) findViewById(R.id.lv_StockSymbol);
 
 
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        getMenuInflater().inflate(R.menu.stockselector_activity_actions, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
         return super.onCreateOptionsMenu(menu);
     }
 }

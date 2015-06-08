@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bt_StockPriceReachesALimit"
+        android:title="Stock price reaches a limit" />
+    <item
+        android:id="@+id/bt_CalendarReachesADefinedDate"
+        android:title="Calendar reaches a defined date"/>
+    <item
+        android:id="@+id/bt_FinalAmountIReceiveReachesALimit"
+        android:title="Final amount I receive reaches a limit"/>
+</menu>

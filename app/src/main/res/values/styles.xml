@@ -3,6 +3,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle"   tools:ignore="NewApi">@style/MyActionBar</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="bottomSheetStyle">@style/BottomSheet.StyleDialog</item>
 
     </style>
 
@@ -25,6 +26,14 @@
         <item name="displayOptions">showHome|useLogo</item>
 
     </style>
+
+    <style name="BottomSheet.StyleDialog" parent="BottomSheet.Dialog">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="bs_dialogBackground">@color/blue_theme</item>
+    </style>
+
+
 
 
 </resources>

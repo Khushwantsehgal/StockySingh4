@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     EditText mStock;
 
     //Textview for actual amount to be remitted into account, the Currency code for the final amount/
-    TextView mFinalAmount, mCurrencyCode,mStockSymbol, mCurrencyCode2;
+    TextView mFinalAmount, mCurrencyCode,mStockSymbol, mCurrencyCode2,mReminder;
 
     //Integer to hold the number of stocks entered by user
     int mStockValue = 0;
@@ -117,6 +117,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mCurrencyCode.setOnClickListener(this);
         mCurrencyCode2.setOnClickListener(this);
         mStockSymbol.setOnClickListener(this);
+        mReminder.setOnClickListener(this);
         ShowTicker();
 
 
@@ -129,6 +130,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mFinalAmount = (TextView) findViewById(R.id.FinalAmount_textview);
         mCurrencyCode = (TextView) findViewById(R.id.tv_CurrencyCode);
         mCurrencyCode2 = (TextView) findViewById(R.id.tv_CurrencyCode2);
+        mReminder = (TextView) findViewById(R.id.tv_Reminder);
         mStockSymbol = (TextView) findViewById(R.id.tv_StocksSymbol);
         mProgress = (ProgressBar) findViewById(R.id.progress_bar);
         //mProgress.setVisibility(View.GONE);
@@ -149,6 +151,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
          Log.d("CurrencySelected", String.valueOf(CurrencySelected));
          mCurrencyCode.setText(String.valueOf(CurrencySelected));
          mCurrencyCode2.setText(String.valueOf(CurrencySelected));
+
 
         mYQLQuery = mYQLQuery_head + String.valueOf(StockSelected) + mYQLQuery_tail;
         mYQLQueryToGetUSDtoLocalCurrencyConversion = mYQLQueryToGetUSDtoLocalCurrencyConversion_head + String.valueOf(CurrencySelected) + mYQLQueryToGetUSDtoLocalCurrencyConversion_tail;
@@ -323,9 +326,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.tv_CurrencyCode2:{
                 Intent intent = new Intent(MainActivity.this, MainCurrencyCodeSelector.class);
                 startActivityForResult(intent, REQ_CODE_CURRENCY_SYMBOL);
+                Log.d("Debug", "tv_CurrencyCode2");
 
             }
             break;
+            case R.id.tv_Reminder:{
+                Intent intent = new Intent(MainActivity.this, ReminderActivity.class);
+                startActivity(intent);
+                Log.d("Debug", "tv_setReminder");
+            }
 
             default:
             {
