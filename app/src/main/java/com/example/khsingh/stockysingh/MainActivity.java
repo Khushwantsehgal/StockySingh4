@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -98,7 +99,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        setInitialPreferences();
 
         initViews();
         // Calculate the final amount
@@ -144,10 +145,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
          mStock.setText((String.valueOf(mStockValue)).replaceFirst("^0+(?!$)", ""));
 
          StockSelected = settings.getString("StockSelected", "ADBE");
+         setPreferences("StockSelected", StockSelected);
          Log.d("StockSelected", String.valueOf(StockSelected));
          mStockSymbol.setText(String.valueOf(StockSelected));
 
          CurrencySelected = settings.getString("CurrencySelected", "INR");
+         setPreferences("CurrencySelected", CurrencySelected);
          Log.d("CurrencySelected", String.valueOf(CurrencySelected));
          mCurrencyCode.setText(String.valueOf(CurrencySelected));
          mCurrencyCode2.setText(String.valueOf(CurrencySelected));
@@ -443,7 +446,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             TextView textView = (TextView) findViewById(R.id.MarqueeText);
 
-            textView.setText(settings.getString("StockSelected","#Error retrieving value#") +getString(R.string.tab)+ settings.getString("StockTradingAt","#Error retrieving value#") +   getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab)+getString(R.string.tab) +settings.getString("CurrencySelected","#Error retrieving value#") + getString(R.string.tab) + settings.getString("LocalCurrencyExchangeRate","#Error retrieving value#")  +"    Brokage USD20   Wire Transfer USD25 ");
+            textView.setText(settings.getString("StockSelected", "#Error retrieving value#") + getString(R.string.tab) + settings.getString("StockTradingAt", "#Error retrieving value#") + getString(R.string.tab) + getString(R.string.tab) + getString(R.string.tab) + getString(R.string.tab) + settings.getString("CurrencySelected", "#Error retrieving value#") + getString(R.string.tab) + settings.getString("LocalCurrencyExchangeRate", "#Error retrieving value#") + "    Brokage USD20   Wire Transfer USD25 ");
 
 
             textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
@@ -473,6 +476,25 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     }
 
+    public void setInitialPreferences(){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+        if (isFirstRun)
+        {
+            // Code to run once
+            Log.d("Debug: isFirstRun"," isFirstRun code is running");
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("StockCount", 0);
+            editor.putString("StockTradingAt", "0");
+            editor.putString("LocalCurrencyExchangeRate", "0");
+            editor.putString("CurrencySelected", "INR");
+            editor.putString("StockSelected", "ADBE");
+        }
+
+
+    }
     public void setPreferences() {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
